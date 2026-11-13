@@ -1,0 +1,17 @@
+name: Build JSXBIN
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile to JSXBIN
+        run: |
+          curl -L "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/Adobe/vsextensions/extendscript-debug/2.0.2/vspackage" -o ext.vsix.gz
+          gunzip ext.vsix.gz
+          unzip -q ext.vsix
+          node extension/public-scripts/exportToJSX.js -f -n CheckEXPO2027.jsx
+      - uses: actions/upload-artifact@v4
+        with:
+          name: JSXBIN-File
+          path: "*.jsxbin"
